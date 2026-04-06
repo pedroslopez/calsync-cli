@@ -1,0 +1,25 @@
+{
+  "name": "calsync",
+  "version": "1.0.0",
+  "description": "Sync personal Google Calendar events as Busy blocks on your work calendar",
+  "main": "dist/index.js",
+  "bin": {
+    "calsync": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "commander": "^12.1.0",
+    "googleapis": "^140.0.1",
+    "open": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
