@@ -25,12 +25,6 @@ You need an OAuth 2.0 Client ID from Google Cloud Console:
 ### 2. Install
 
 ```bash
-npm install -g calsync-cli
-```
-
-Or clone and install locally:
-
-```bash
 git clone https://github.com/pedroslopez/calsync-cli.git
 cd calsync-cli
 npm install && npm run build
