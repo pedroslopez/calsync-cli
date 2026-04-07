@@ -87,4 +87,11 @@ export function registerConfigCommands(program: Command): void {
       const cfg = store.loadConfig();
       console.log(JSON.stringify(cfg, null, 2));
     });
+
+  config
+    .command("path")
+    .description("Print the config directory path")
+    .action(() => {
+      console.log(store.getConfigDir());
+    });
 }

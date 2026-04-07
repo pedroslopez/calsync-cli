@@ -67,8 +67,24 @@ export async function computeSyncActions(
   for (const source of config.sources) {
     const auth = sourceAuths.get(source.account)!;
     const events = await cal.listEvents(auth, source.calendarId, now, timeMax);
+    console.log(`\n[${source.account}] ${events.length} events found:`);
     for (const event of events) {
-      if (!event.id || !shouldInclude(event, config)) continue;
+      const title = event.summary || "(no title)";
+      const date = event.start?.dateTime || event.start?.date || "?";
+      if (!event.id || !shouldInclude(event, config)) {
+        const reason = !event.id
+          ? "no id"
+          : event.status === "cancelled"
+            ? "cancelled"
+            : config.skipAllDay && isAllDay(event)
+              ? "all-day"
+              : config.skipDeclined && isDeclined(event)
+                ? "declined"
+                : "filtered";
+        console.log(`  - "${title}" ${date} (skipped: ${reason})`);
+        continue;
+      }
+      console.log(`  - "${title}" ${date}`);
       const cid = compositeId(source.account, event.id);
       sourceMap.set(cid, event);
     }
