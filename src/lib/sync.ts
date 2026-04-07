@@ -18,6 +18,7 @@ interface SyncAction {
   compositeId: string;
   sourceEvent?: CalendarEvent;
   blockerId?: string;
+  blockerEvent?: CalendarEvent;
 }
 
 function compositeId(accountName: string, eventId: string): string {
@@ -123,10 +124,10 @@ export async function computeSyncActions(
     }
   }
 
-  // Delete blockers whose source no longer exists
+  // Delete blockers whose source event no longer exists
   for (const [cid, blocker] of blockerMap) {
     if (!sourceMap.has(cid)) {
-      actions.push({ type: "delete", compositeId: cid, blockerId: blocker.id! });
+      actions.push({ type: "delete", compositeId: cid, blockerId: blocker.id!, blockerEvent: blocker });
     }
   }
 
@@ -156,10 +157,15 @@ export async function executeSync(
           console.log(`  [UPDATE] "${title}" ${time}`);
           result.updated++;
           break;
-        case "delete":
-          console.log(`  [DELETE] blocker ${action.blockerId} (source removed)`);
+        case "delete": {
+          const origTitle =
+            action.blockerEvent?.extendedProperties?.private?.calsyncSourceSummary ||
+            action.compositeId;
+          const blockerTime = action.blockerEvent?.start?.dateTime || action.blockerEvent?.start?.date || "";
+          console.log(`  [DELETE] "${origTitle}" ${blockerTime} (source removed)`);
           result.deleted++;
           break;
+        }
       }
     }
     return result;
@@ -173,6 +179,7 @@ export async function executeSync(
             destAuth,
             config.destinationCalendarId,
             action.compositeId,
+            action.sourceEvent!.summary || "(no title)",
             action.sourceEvent!.start!,
             action.sourceEvent!.end!,
             config.blockerSummary,

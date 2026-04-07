@@ -66,6 +66,7 @@ export async function createBlocker(
   auth: OAuth2Client,
   calendarId: string,
   sourceCompositeId: string,
+  sourceSummary: string,
   start: CalendarEvent["start"],
   end: CalendarEvent["end"],
   summary: string,
@@ -84,6 +85,7 @@ export async function createBlocker(
         private: {
           [CALSYNC_SOURCE_ID_KEY]: sourceCompositeId,
           [CALSYNC_MANAGED_KEY]: "true",
+          calsyncSourceSummary: sourceSummary,
         },
       },
     },
