@@ -38,6 +38,9 @@ export function registerSyncCommand(program: Command): void {
         process.exit(1);
       }
 
+      const timestamp = new Date().toISOString();
+      console.log(`\n[${timestamp}] calsync starting...`);
+
       if (opts.dryRun) {
         console.log("Dry run — no changes will be made:\n");
       }
@@ -46,7 +49,7 @@ export function registerSyncCommand(program: Command): void {
         const result = await executeSync(config, !!opts.dryRun);
 
         console.log(
-          `\n${opts.dryRun ? "Would sync" : "Synced"}: ` +
+          `[${timestamp}] ${opts.dryRun ? "Would sync" : "Synced"}: ` +
             `${result.created} created, ${result.updated} updated, ${result.deleted} deleted`
         );
 
