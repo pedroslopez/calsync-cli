@@ -37,7 +37,7 @@ npm install -g .
 # Import your Google Cloud credentials
 calsync auth setup ~/Downloads/client_secret_*.json
 
-# Add your Google accounts (opens browser for OAuth)
+# Add your Google accounts (opens browser for OAuth when available)
 calsync auth add personal
 calsync auth add work
 
@@ -45,6 +45,18 @@ calsync auth add work
 calsync source add personal
 calsync config set destination work
 ```
+
+### Headless / SSH authentication
+
+When `calsync auth add` detects no browser (no TTY, SSH session, container, etc.), it switches to a manual flow automatically:
+
+1. The CLI prints a URL — copy it.
+2. Open the URL in any browser (on your laptop, phone, etc.).
+3. Sign in and click **Allow** on the Google consent screen.
+4. Your browser will be redirected to `http://localhost:3000/...` — the page may show a connection error, **that is expected**.
+5. Copy the full URL from the browser address bar and paste it back into the terminal.
+
+The CLI extracts the authorization code from the pasted URL and completes the login without needing the redirect server to be reachable.
 
 ## Usage
 
